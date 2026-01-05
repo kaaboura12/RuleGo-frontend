@@ -16,10 +16,38 @@ struct HomeScreen: View {
     private var quickRules: [Rule] {
         guard selectedCountry != nil else { return [] }
         return [
-            Rule(icon: "smoke", title: "Smoking Restrictions", description: "No smoking in public places"),
-            Rule(icon: "wineglass", title: "Alcohol Rules", description: "Limited alcohol in public areas"),
-            Rule(icon: "creditcard", title: "Carry ID", description: "ID required at all times"),
-            Rule(icon: "banknote", title: "Fines", description: "Heavy fines for littering")
+            Rule(
+                icon: "smoke",
+                title: "Smoking Restrictions",
+                description: "No smoking in public places",
+                category: "Smoking",
+                fine: "200 TRY",
+                tip: nil
+            ),
+            Rule(
+                icon: "wineglass",
+                title: "Alcohol Rules",
+                description: "Limited alcohol in public areas",
+                category: "Alcohol",
+                fine: "300 TRY",
+                tip: nil
+            ),
+            Rule(
+                icon: "creditcard",
+                title: "Carry ID",
+                description: "ID required at all times",
+                category: "Cultural",
+                fine: nil,
+                tip: "Always keep ID with you"
+            ),
+            Rule(
+                icon: "banknote",
+                title: "Fines",
+                description: "Heavy fines for littering",
+                category: "Public Behavior",
+                fine: "500 TRY",
+                tip: "Use designated bins"
+            )
         ]
     }
     

@@ -19,7 +19,7 @@ struct MainTabView: View {
                 case .home:
                     HomeScreen()
                 case .rules:
-                    RulesView()
+                    RulesScreen()
                 case .profile:
                     ProfileView()
                 }
@@ -148,12 +148,13 @@ private struct RulesViewCard: View {
 
 struct ProfileView: View {
     var body: some View {
-        ZStack {
-            Image("backgroundimage")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(minWidth: 0, maxWidth: .infinity)
-                .edgesIgnoringSafeArea(.all)
+        NavigationStack {
+            ZStack {
+                Image("backgroundimage")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 24) {
                 // Profile Header
@@ -177,13 +178,37 @@ struct ProfileView: View {
                     ProfileOption(icon: "gear", title: "Settings")
                     ProfileOption(icon: "bell.fill", title: "Notifications")
                     ProfileOption(icon: "heart.fill", title: "Favorites")
-                    ProfileOption(icon: "info.circle.fill", title: "About")
+                    
+                    // About with Navigation
+                    NavigationLink(destination: AboutPage()) {
+                        HStack {
+                            Image(systemName: "info.circle.fill")
+                                .font(.system(size: 20))
+                                .foregroundColor(Color(red: 0.2, green: 0.6, blue: 0.9))
+                                .frame(width: 40)
+                            
+                            Text("About")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14))
+                                .foregroundColor(.gray)
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.9))
+                        .cornerRadius(12)
+                    }
                 }
                 .padding(.horizontal)
                 
                 Spacer()
             }
             .padding(.bottom, 100)
+        }
+        .navigationBarHidden(true)
         }
     }
 }
