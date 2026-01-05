@@ -12,7 +12,6 @@ import SwiftUI
 struct SettingsPage: View {
     @Environment(\.dismiss) private var dismiss
     @State private var notificationsEnabled = true
-    @State private var emailNotifications = false
     @State private var pushNotifications = true
     
     var body: some View {
@@ -50,7 +49,6 @@ struct SettingsPage: View {
                         // Notifications Section
                         NotificationsSection(
                             notificationsEnabled: $notificationsEnabled,
-                            emailNotifications: $emailNotifications,
                             pushNotifications: $pushNotifications
                         )
                         
@@ -141,12 +139,6 @@ private struct AccountSection: View {
                     subtitle: "Manage your profile information"
                 )
                 
-                SettingsRow(
-                    icon: "envelope.fill",
-                    iconColor: .green,
-                    title: "Email",
-                    subtitle: "user@example.com"
-                )
                 
                 SettingsRow(
                     icon: "lock.fill",
@@ -163,7 +155,6 @@ private struct AccountSection: View {
 
 private struct NotificationsSection: View {
     @Binding var notificationsEnabled: Bool
-    @Binding var emailNotifications: Bool
     @Binding var pushNotifications: Bool
     
     var body: some View {
@@ -178,14 +169,6 @@ private struct NotificationsSection: View {
                 )
                 
                 if notificationsEnabled {
-                    SettingsToggle(
-                        icon: "envelope.badge.fill",
-                        iconColor: .purple,
-                        title: "Email Notifications",
-                        subtitle: "Get updates via email",
-                        isOn: $emailNotifications
-                    )
-                    
                     SettingsToggle(
                         icon: "app.badge.fill",
                         iconColor: .blue,
