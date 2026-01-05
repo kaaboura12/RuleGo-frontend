@@ -17,7 +17,7 @@ struct MainTabView: View {
             Group {
                 switch selectedTab {
                 case .home:
-                    HomeContentView()
+                    HomeScreen()
                 case .rules:
                     RulesView()
                 case .profile:
@@ -82,19 +82,19 @@ struct RulesView: View {
                 
                 ScrollView {
                     VStack(spacing: 16) {
-                        RuleCard(
+                        RulesViewCard(
                             icon: "checkmark.shield.fill",
                             title: "Safety First",
                             description: "Always keep your documents safe"
                         )
                         
-                        RuleCard(
+                        RulesViewCard(
                             icon: "map.fill",
                             title: "Plan Ahead",
                             description: "Research your destination"
                         )
                         
-                        RuleCard(
+                        RulesViewCard(
                             icon: "clock.fill",
                             title: "Be Punctual",
                             description: "Arrive early at airports"
@@ -109,9 +109,9 @@ struct RulesView: View {
     }
 }
 
-// MARK: - Rule Card Component
+// MARK: - Rules View Card Component
 
-struct RuleCard: View {
+private struct RulesViewCard: View {
     let icon: String
     let title: String
     let description: String
