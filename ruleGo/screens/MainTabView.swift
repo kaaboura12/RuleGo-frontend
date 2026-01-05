@@ -177,7 +177,29 @@ struct ProfileView: View {
                 VStack(spacing: 12) {
                     ProfileOption(icon: "gear", title: "Settings")
                     ProfileOption(icon: "bell.fill", title: "Notifications")
-                    ProfileOption(icon: "heart.fill", title: "Favorites")
+                    
+                    // Favorites with Navigation
+                    NavigationLink(destination: FavoritesPage()) {
+                        HStack {
+                            Image(systemName: "heart.fill")
+                                .font(.system(size: 20))
+                                .foregroundColor(Color(red: 0.2, green: 0.6, blue: 0.9))
+                                .frame(width: 40)
+                            
+                            Text("Favorites")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14))
+                                .foregroundColor(.gray)
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.9))
+                        .cornerRadius(12)
+                    }
                     
                     // About with Navigation
                     NavigationLink(destination: AboutPage()) {

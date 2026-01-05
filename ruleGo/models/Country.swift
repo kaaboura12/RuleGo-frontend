@@ -46,7 +46,8 @@ struct Rule: Identifiable {
             description: "Smoking is prohibited in all indoor public areas including restaurants, cafes, and shopping malls.",
             category: "Smoking",
             fine: "200 TRY",
-            tip: "Some outdoor areas in malls are also restricted."
+            tip: "Some outdoor areas in malls are also restricted.",
+            isFavorite: true
         ),
         Rule(
             icon: "car.fill",
@@ -54,7 +55,8 @@ struct Rule: Identifiable {
             description: "Maximum speed limit is 120 km/h on highways and 90 km/h on rural roads.",
             category: "Driving",
             fine: "500-1000 TRY",
-            tip: "Speed cameras are common. Always check road signs."
+            tip: "Speed cameras are common. Always check road signs.",
+            isFavorite: true
         ),
         Rule(
             icon: "wineglass",
@@ -70,7 +72,8 @@ struct Rule: Identifiable {
             description: "When visiting mosques, women should cover their heads and everyone should remove shoes.",
             category: "Dress Code",
             fine: nil,
-            tip: "Carry a scarf if you plan to visit religious sites."
+            tip: "Carry a scarf if you plan to visit religious sites.",
+            isFavorite: true
         ),
         Rule(
             icon: "camera.fill",
