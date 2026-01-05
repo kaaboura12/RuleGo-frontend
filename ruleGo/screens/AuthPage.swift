@@ -151,6 +151,20 @@ struct AuthPage: View {
                             SocialLoginButton(icon: "apple.logo", color: .black)
                             SocialLoginButton(icon: "g.circle.fill", color: .red)
                         }
+                        
+                        // Demo Button
+                        NavigationLink(destination: MainTabView()) {
+                            Text("Demo Mode")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(Color(red: 0.3, green: 0.85, blue: 0.4))
+                                .padding(.vertical, 12)
+                                .padding(.horizontal, 32)
+                                .background(
+                                    Color(red: 0.3, green: 0.85, blue: 0.4).opacity(0.15)
+                                )
+                                .cornerRadius(20)
+                        }
+                        .padding(.top, 8)
                     }
                     .padding(.top, 24)
                     .padding(.bottom, 32)
