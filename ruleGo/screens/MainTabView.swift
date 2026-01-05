@@ -175,7 +175,29 @@ struct ProfileView: View {
                 
                 // Profile Options
                 VStack(spacing: 12) {
-                    ProfileOption(icon: "gear", title: "Settings")
+                    // Settings with Navigation
+                    NavigationLink(destination: SettingsPage()) {
+                        HStack {
+                            Image(systemName: "gear")
+                                .font(.system(size: 20))
+                                .foregroundColor(Color(red: 0.2, green: 0.6, blue: 0.9))
+                                .frame(width: 40)
+                            
+                            Text("Settings")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14))
+                                .foregroundColor(.gray)
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.9))
+                        .cornerRadius(12)
+                    }
+                    
                     ProfileOption(icon: "bell.fill", title: "Notifications")
                     
                     // Favorites with Navigation
