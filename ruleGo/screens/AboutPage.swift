@@ -57,7 +57,7 @@ struct AboutPage: View {
                     // Spacing for bottom
                     Color.clear.frame(height: 40)
                 }
-                .padding(.top, 60)
+                .padding(.top, 80)
                 .padding(.horizontal, 24)
             }
             
@@ -89,43 +89,19 @@ struct AboutPage: View {
 
 private struct AppLogoSection: View {
     var body: some View {
-        VStack(spacing: 16) {
-            // App Icon Placeholder
-            ZStack {
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color(red: 0.2, green: 0.6, blue: 0.9),
-                                Color(red: 0.3, green: 0.85, blue: 0.4)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 100, height: 100)
-                
-                Text("Rule")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(.white)
-                + Text("GO")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(Color(red: 0.3, green: 0.85, blue: 0.4))
-            }
-            .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
-            
-            Text("Rule")
-                .font(.system(size: 36, weight: .bold))
-                .foregroundColor(.white)
-            + Text("GO")
-                .font(.system(size: 36, weight: .bold))
-                .foregroundColor(Color(red: 0.3, green: 0.85, blue: 0.4))
+        VStack(spacing: 20) {
+            Image("AppLogo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 120, height: 120)
+                .clipShape(RoundedRectangle(cornerRadius: 26))
+                .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
             
             Text("Know the rules. Travel safely.")
-                .font(.system(size: 16, weight: .medium))
+                .font(.system(size: 17, weight: .medium))
                 .foregroundColor(.white.opacity(0.9))
+                .multilineTextAlignment(.center)
         }
-        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
     }
 }
 
