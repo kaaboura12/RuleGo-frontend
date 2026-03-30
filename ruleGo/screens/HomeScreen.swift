@@ -7,12 +7,13 @@
 
 import SwiftUI
 
+private let brandBlue = Color(red: 0.2, green: 0.6, blue: 0.9)
+
 // MARK: - Home Screen
 
 struct HomeScreen: View {
     @State private var selectedCountry: Country?
     
-    // Sample data for selected country
     private var quickRules: [Rule] {
         guard selectedCountry != nil else { return [] }
         return [
@@ -53,60 +54,42 @@ struct HomeScreen: View {
     
     var body: some View {
         ZStack {
-            // Background Image
             Image("backgroundimage")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .edgesIgnoringSafeArea(.all)
             
-            // Overlay for better readability
-            LinearGradient(
-                colors: [
-                    Color.black.opacity(0.3),
-                    Color.black.opacity(0.1),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .center
-            )
-            .ignoresSafeArea()
+            Color.black.opacity(0.01)
+                .edgesIgnoringSafeArea(.all)
             
-            // Content
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 24) {
-                    // Header Section
+                VStack(spacing: 16) {
                     HeaderSection()
                     
-                    // Country Selector
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Destination")
-                            .font(.system(size: 15, weight: .semibold))
+                        Text("Select Your Destination")
+                            .font(.system(size: 17, weight: .semibold))
                             .foregroundColor(.white)
-                            .padding(.horizontal, 24)
+                            .padding(.horizontal, 20)
                         
                         CountrySelector(selectedCountry: $selectedCountry)
-                            .padding(.horizontal, 24)
+                            .padding(.horizontal, 20)
                     }
                     
-                    // Quick Rules Preview
                     if !quickRules.isEmpty {
                         QuickRulesSection(rules: quickRules, country: selectedCountry!)
                     }
                     
-                    // Categories Section
                     CategoriesSection()
                     
-                    // Emergency Section
                     EmergencySection()
                     
-                    // Footer
                     FooterSection()
                     
-                    // Bottom spacing for navbar
                     Color.clear.frame(height: 100)
                 }
-                .padding(.top, 20)
+                .padding(.top, 16)
             }
         }
     }
@@ -116,20 +99,22 @@ struct HomeScreen: View {
 
 private struct HeaderSection: View {
     var body: some View {
-        VStack(spacing: 8) {
-            Text("Rule")
-                .font(.system(size: 36, weight: .bold))
-                .foregroundColor(.white)
-            + Text("GO")
-                .font(.system(size: 36, weight: .bold))
-                .foregroundColor(Color(red: 0.3, green: 0.85, blue: 0.4))
+        HStack(spacing: 12) {
+            Image("AppLogo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 52, height: 52)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
             
-            Text("Know the rules. Travel safely.")
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(.white.opacity(0.9))
+            Text("Welcome back")
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundColor(.white)
+            
+            Spacer()
         }
-        .padding(.vertical, 12)
-        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 4)
     }
 }
 
@@ -140,42 +125,60 @@ private struct QuickRulesSection: View {
     let country: Country
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            // Section Header
-            HStack {
-                Text("Quick Rules - \(country.flag) \(country.name)")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(.white)
-                    .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
-                
-                Spacer()
-            }
-            .padding(.horizontal, 24)
-            
-            // Rules Cards
-            VStack(spacing: 12) {
-                ForEach(rules) { rule in
-                    RuleCard(rule: rule)
-                }
-            }
-            .padding(.horizontal, 24)
-            
-            // View All Button
-            Button(action: {}) {
-                HStack {
-                    Text("View all rules")
-                        .font(.system(size: 16, weight: .semibold))
+        VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 16) {
+                HStack(spacing: 8) {
+                    Text(country.flag)
+                        .font(.system(size: 24))
                     
-                    Image(systemName: "arrow.right")
-                        .font(.system(size: 14, weight: .semibold))
+                    Text(country.name)
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    Spacer()
                 }
-                .foregroundColor(Color(red: 0.2, green: 0.6, blue: 0.9))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(Color(red: 0.2, green: 0.6, blue: 0.9).opacity(0.1))
-                .cornerRadius(14)
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                
+                VStack(spacing: 10) {
+                    ForEach(rules) { rule in
+                        RuleCard(rule: rule)
+                    }
+                }
+                .padding(.horizontal, 20)
+                
+                Button(action: {}) {
+                    HStack(spacing: 8) {
+                        Text("View All Rules")
+                            .font(.system(size: 15, weight: .semibold))
+                        
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 13, weight: .semibold))
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(
+                        LinearGradient(
+                            colors: [
+                                brandBlue,
+                                Color(red: 0.1, green: 0.45, blue: 0.82)
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .shadow(color: brandBlue.opacity(0.35), radius: 10, x: 0, y: 4)
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 6)
+                .padding(.bottom, 20)
             }
-            .padding(.horizontal, 24)
+            .background(Color(.systemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 22))
+            .shadow(color: .black.opacity(0.15), radius: 20, x: 0, y: 10)
+            .padding(.horizontal, 20)
         }
     }
 }
@@ -186,37 +189,35 @@ private struct RuleCard: View {
     let rule: Rule
     
     var body: some View {
-        HStack(spacing: 16) {
-            // Icon
+        HStack(spacing: 14) {
             Image(systemName: rule.icon)
-                .font(.system(size: 22, weight: .medium))
-                .foregroundColor(Color(red: 0.2, green: 0.6, blue: 0.9))
-                .frame(width: 48, height: 48)
-                .background(Color.white.opacity(0.95))
-                .cornerRadius(12)
+                .font(.system(size: 18, weight: .medium))
+                .foregroundColor(brandBlue)
+                .frame(width: 44, height: 44)
+                .background(Color(.systemGray6))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             
-            // Content
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(rule.title)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(.primary)
                 
                 Text(rule.description)
-                    .font(.system(size: 14))
-                    .foregroundColor(.secondary)
+                    .font(.system(size: 13))
+                    .foregroundColor(Color(.systemGray))
+                    .lineLimit(1)
             }
             
             Spacer()
             
             Image(systemName: "chevron.right")
-                .font(.system(size: 14))
-                .foregroundColor(.secondary.opacity(0.5))
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(Color(.systemGray3))
         }
-        .padding(16)
-        .background(Color.white.opacity(0.95))
-        .background(.ultraThinMaterial)
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.1), radius: 12, x: 0, y: 4)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 
@@ -225,24 +226,31 @@ private struct RuleCard: View {
 private struct CategoriesSection: View {
     private let categories = RuleCategory.categories
     private let columns = [
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16)
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12)
     ]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Browse by Category")
-                .font(.system(size: 20, weight: .bold))
-                .foregroundColor(.white)
-                .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
-                .padding(.horizontal, 24)
-            
-            LazyVGrid(columns: columns, spacing: 16) {
-                ForEach(categories) { category in
-                    CategoryCard(category: category)
+        VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Browse by Category")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
+                
+                LazyVGrid(columns: columns, spacing: 12) {
+                    ForEach(categories) { category in
+                        CategoryCard(category: category)
+                    }
                 }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
             }
-            .padding(.horizontal, 24)
+            .background(Color(.systemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 22))
+            .shadow(color: .black.opacity(0.15), radius: 20, x: 0, y: 10)
+            .padding(.horizontal, 20)
         }
     }
 }
@@ -252,35 +260,27 @@ private struct CategoriesSection: View {
 private struct CategoryCard: View {
     let category: RuleCategory
     
-    private var categoryColor: Color {
-        switch category.color {
-        case "red": return .red
-        case "blue": return .blue
-        case "purple": return .purple
-        case "pink": return .pink
-        case "orange": return .orange
-        case "green": return .green
-        default: return .gray
-        }
-    }
-    
     var body: some View {
         Button(action: {}) {
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Image(systemName: category.icon)
-                    .font(.system(size: 28, weight: .medium))
-                    .foregroundColor(categoryColor)
+                    .font(.system(size: 26, weight: .medium))
+                    .foregroundColor(brandBlue)
+                    .frame(width: 50, height: 50)
+                    .background(brandBlue.opacity(0.12))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 
                 Text(category.title)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.primary)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 24)
-            .background(Color.white.opacity(0.95))
-            .background(.ultraThinMaterial)
-            .cornerRadius(16)
-            .shadow(color: .black.opacity(0.1), radius: 12, x: 0, y: 4)
+            .padding(.vertical, 18)
+            .background(Color(.systemGray6))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
         }
     }
 }
@@ -291,24 +291,32 @@ private struct EmergencySection: View {
     private let contacts = EmergencyContact.defaultContacts
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundColor(.red)
-                
-                Text("Emergency Contacts")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(.white)
-                    .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
-            }
-            .padding(.horizontal, 24)
-            
-            VStack(spacing: 12) {
-                ForEach(contacts, id: \.number) { contact in
-                    EmergencyContactCard(contact: contact)
+        VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 16) {
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 18))
+                        .foregroundColor(.red)
+                    
+                    Text("Emergency Contacts")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.primary)
                 }
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                
+                VStack(spacing: 10) {
+                    ForEach(contacts, id: \.number) { contact in
+                        EmergencyContactCard(contact: contact)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
             }
-            .padding(.horizontal, 24)
+            .background(Color(.systemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 22))
+            .shadow(color: .black.opacity(0.15), radius: 20, x: 0, y: 10)
+            .padding(.horizontal, 20)
         }
     }
 }
@@ -319,40 +327,46 @@ private struct EmergencyContactCard: View {
     let contact: EmergencyContact
     
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 14) {
             Image(systemName: contact.icon)
-                .font(.system(size: 20))
+                .font(.system(size: 18, weight: .medium))
                 .foregroundColor(.red)
                 .frame(width: 44, height: 44)
                 .background(Color.red.opacity(0.1))
-                .cornerRadius(10)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(contact.title)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(.primary)
                 
                 Text(contact.number)
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundColor(.secondary)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color(.systemGray))
             }
             
             Spacer()
             
             Button(action: {}) {
                 Image(systemName: "phone.fill")
-                    .font(.system(size: 16))
+                    .font(.system(size: 14))
                     .foregroundColor(.white)
-                    .frame(width: 40, height: 40)
-                    .background(Color.red)
-                    .cornerRadius(10)
+                    .frame(width: 38, height: 38)
+                    .background(
+                        LinearGradient(
+                            colors: [.red, Color.red.opacity(0.8)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .shadow(color: .red.opacity(0.3), radius: 6, x: 0, y: 3)
             }
         }
-        .padding(16)
-        .background(Color.white.opacity(0.95))
-        .background(.ultraThinMaterial)
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.1), radius: 12, x: 0, y: 4)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 
@@ -360,22 +374,33 @@ private struct EmergencyContactCard: View {
 
 private struct FooterSection: View {
     var body: some View {
-        VStack(spacing: 12) {
-            Text("📚 Data sourced from official and trusted sources")
-                .font(.system(size: 13))
-                .foregroundColor(.white.opacity(0.9))
-                .multilineTextAlignment(.center)
+        VStack(spacing: 10) {
+            HStack(spacing: 6) {
+                Image(systemName: "info.circle.fill")
+                    .font(.system(size: 13))
+                    .foregroundColor(brandBlue)
+                
+                Text("Data sourced from official and trusted sources")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(Color(.systemGray))
+            }
             
-            Text("⚠️ RuleGO does not replace official government advice")
-                .font(.system(size: 13, weight: .medium))
-                .foregroundColor(.white.opacity(0.8))
-                .multilineTextAlignment(.center)
+            HStack(spacing: 6) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 13))
+                    .foregroundColor(.orange)
+                
+                Text("RuleGO does not replace official government advice")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(Color(.systemGray))
+            }
         }
-        .padding(.horizontal, 32)
-        .padding(.vertical, 20)
-        .background(Color.black.opacity(0.2))
-        .cornerRadius(16)
-        .padding(.horizontal, 24)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 18)
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.1), radius: 12, x: 0, y: 6)
+        .padding(.horizontal, 20)
     }
 }
 

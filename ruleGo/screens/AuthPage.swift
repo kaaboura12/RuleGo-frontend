@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+private let brandBlue = Color(red: 0.2, green: 0.6, blue: 0.9)
+
 struct AuthPage: View {
     @State private var isLoginMode = true
     @State private var email = ""
@@ -16,7 +18,7 @@ struct AuthPage: View {
     @State private var confirmPassword = ""
     @State private var isPasswordVisible = false
     @State private var isConfirmPasswordVisible = false
-    
+
     var body: some View {
         ZStack {
             // Background Image
@@ -25,244 +27,390 @@ struct AuthPage: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .edgesIgnoringSafeArea(.all)
-            
-            // Content
-            VStack {
-                Spacer()
-                
-                // Auth Card
+
+            Color.black.opacity(0.01)
+                .edgesIgnoringSafeArea(.all)
+
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
-                    // Header
-                    VStack(spacing: 12) {
-                        Text("RuleGo")
-                            .font(.system(size: 36, weight: .bold))
-                            .foregroundColor(Color(red: 0.2, green: 0.6, blue: 0.9))
-                        
-                        if !isLoginMode {
-                            VStack(spacing: 4) {
-                                Text("If you already have an account")
-                                    .font(.system(size: 14))
-                                    .foregroundColor(.gray)
-                                
-                                Button(action: {
-                                    withAnimation(.spring()) {
-                                        isLoginMode = true
-                                    }
-                                }) {
-                                    Text("Login here!")
-                                        .font(.system(size: 14, weight: .semibold))
-                                        .foregroundColor(Color(red: 0.2, green: 0.6, blue: 0.9))
+
+                    // MARK: Logo & Brand
+                    VStack(spacing: 8) {
+                        Image("AppLogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 90, height: 90)
+                            .clipShape(RoundedRectangle(cornerRadius: 22))
+                            .shadow(color: .black.opacity(0.3), radius: 14, x: 0, y: 6)
+
+                        Text("Know the rules. Go anywhere.")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(.white.opacity(0.82))
+                            .tracking(0.4)
+                    }
+                    .padding(.top, 16)
+                    .padding(.bottom, 14)
+
+                    // MARK: Auth Card
+                    VStack(spacing: 0) {
+
+                        // Tab Selector
+                        HStack(spacing: 0) {
+                            AuthTabButton(title: "Sign In", isSelected: isLoginMode) {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                                    isLoginMode = true
                                 }
                             }
-                        }
-                    }
-                    .padding(.top, 32)
-                    .padding(.bottom, 24)
-                    
-                    // Form Fields
-                    VStack(spacing: 20) {
-                        if isLoginMode {
-                            // Login Form
-                            CustomTextField(
-                                placeholder: "Enter email or username",
-                                text: $email
-                            )
-                            
-                            CustomSecureField(
-                                placeholder: "Password",
-                                text: $password,
-                                isVisible: $isPasswordVisible
-                            )
-                        } else {
-                            // Sign Up Form
-                            CustomTextField(
-                                placeholder: "Enter Email",
-                                text: $email
-                            )
-                            
-                            CustomTextField(
-                                placeholder: "Create Username",
-                                text: $username
-                            )
-                            
-                            CustomTextField(
-                                placeholder: "Contact Number",
-                                text: $contactNumber,
-                                keyboardType: .phonePad
-                            )
-                            
-                            CustomSecureField(
-                                placeholder: "Password",
-                                text: $password,
-                                isVisible: $isPasswordVisible
-                            )
-                            
-                            CustomSecureField(
-                                placeholder: "Confirm Password",
-                                text: $confirmPassword,
-                                isVisible: $isConfirmPasswordVisible
-                            )
-                        }
-                    }
-                    .padding(.horizontal, 32)
-                    
-                    // Action Button
-                    Button(action: handleAuth) {
-                        Text(isLoginMode ? "Login" : "Sign Up")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(Color(red: 0.2, green: 0.6, blue: 0.9))
-                            .cornerRadius(25)
-                            .shadow(color: Color(red: 0.2, green: 0.6, blue: 0.9).opacity(0.3), radius: 10, x: 0, y: 5)
-                    }
-                    .padding(.horizontal, 32)
-                    .padding(.top, 32)
-                    
-                    // Switch Mode
-                    if isLoginMode {
-                        HStack(spacing: 4) {
-                            Text("Don't have an account?")
-                                .font(.system(size: 14))
-                                .foregroundColor(.gray)
-                            
-                            Button(action: {
-                                withAnimation(.spring()) {
+                            AuthTabButton(title: "Sign Up", isSelected: !isLoginMode) {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
                                     isLoginMode = false
                                 }
-                            }) {
-                                Text("Register here!")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundColor(Color(red: 0.2, green: 0.6, blue: 0.9))
                             }
                         }
-                        .padding(.top, 16)
-                    }
-                    
-                    // Social Login
-                    VStack(spacing: 16) {
-                        Text("or continue with")
-                            .font(.system(size: 14))
-                            .foregroundColor(.gray.opacity(0.7))
-                        
-                        HStack(spacing: 24) {
-                            SocialLoginButton(icon: "logo.facebook", color: .blue)
-                            SocialLoginButton(icon: "apple.logo", color: .black)
-                            SocialLoginButton(icon: "g.circle.fill", color: .red)
-                        }
-                        
-                        // Demo Button
-                        NavigationLink(destination: MainTabView()) {
-                            Text("Demo Mode")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(Color(red: 0.3, green: 0.85, blue: 0.4))
-                                .padding(.vertical, 12)
-                                .padding(.horizontal, 32)
-                                .background(
-                                    Color(red: 0.3, green: 0.85, blue: 0.4).opacity(0.15)
+                        .padding(4)
+                        .background(Color(.systemGray6))
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .padding(.horizontal, 24)
+                        .padding(.top, 28)
+
+                        // Form Fields
+                        VStack(spacing: 14) {
+                            if isLoginMode {
+                                AuthInputField(
+                                    icon: "envelope",
+                                    placeholder: "Email or username",
+                                    text: $email,
+                                    keyboardType: .emailAddress
                                 )
-                                .cornerRadius(20)
+                                AuthSecureField(
+                                    icon: "lock",
+                                    placeholder: "Password",
+                                    text: $password,
+                                    isVisible: $isPasswordVisible
+                                )
+
+                                HStack {
+                                    Spacer()
+                                    NavigationLink(destination: ForgotPasswordPage()) {
+                                        Text("Forgot password?")
+                                            .font(.system(size: 13, weight: .medium))
+                                            .foregroundColor(brandBlue)
+                                    }
+                                }
+                                .padding(.top, 2)
+
+                            } else {
+                                AuthInputField(
+                                    icon: "envelope",
+                                    placeholder: "Email address",
+                                    text: $email,
+                                    keyboardType: .emailAddress
+                                )
+                                AuthInputField(
+                                    icon: "person",
+                                    placeholder: "Username",
+                                    text: $username
+                                )
+                                AuthInputField(
+                                    icon: "phone",
+                                    placeholder: "Phone number",
+                                    text: $contactNumber,
+                                    keyboardType: .phonePad
+                                )
+                                AuthSecureField(
+                                    icon: "lock",
+                                    placeholder: "Password",
+                                    text: $password,
+                                    isVisible: $isPasswordVisible
+                                )
+                                AuthSecureField(
+                                    icon: "checkmark.shield",
+                                    placeholder: "Confirm password",
+                                    text: $confirmPassword,
+                                    isVisible: $isConfirmPasswordVisible
+                                )
+                            }
                         }
-                        .padding(.top, 8)
+                        .padding(.horizontal, 24)
+                        .padding(.top, 20)
+
+                        // Primary CTA Button
+                        Button(action: handleAuth) {
+                            Text(isLoginMode ? "Sign In" : "Create Account")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 16)
+                                .background(
+                                    LinearGradient(
+                                        colors: [
+                                            brandBlue,
+                                            Color(red: 0.1, green: 0.45, blue: 0.82)
+                                        ],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .clipShape(RoundedRectangle(cornerRadius: 14))
+                                .shadow(color: brandBlue.opacity(0.45), radius: 12, x: 0, y: 6)
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 24)
+
+                        // Divider
+                        HStack(spacing: 12) {
+                            Rectangle()
+                                .fill(Color(.systemGray4))
+                                .frame(height: 1)
+                            Text("or continue with")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(Color(.systemGray2))
+                                .fixedSize()
+                            Rectangle()
+                                .fill(Color(.systemGray4))
+                                .frame(height: 1)
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 24)
+
+                        // Social Auth Buttons
+                        HStack(spacing: 14) {
+                            SocialAuthButton(
+                                imageName: "apple-logo",
+                                label: "Apple",
+                                isTemplate: true,
+                                backgroundColor: Color(.label),
+                                labelColor: Color(.systemBackground)
+                            ) {
+                                // Handle Apple Sign In
+                            }
+
+                            SocialAuthButton(
+                                imageName: "google",
+                                label: "Google",
+                                isTemplate: false,
+                                backgroundColor: Color(.systemBackground),
+                                labelColor: Color(.label),
+                                hasBorder: true
+                            ) {
+                                // Handle Google Sign In
+                            }
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 16)
+
+                        // Guest / Demo
+                        NavigationLink(destination: MainTabView()) {
+                            Text("Continue as Guest")
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundColor(Color(.systemGray))
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 20)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .strokeBorder(Color(.systemGray4), lineWidth: 1)
+                                )
+                        }
+                        .padding(.top, 16)
+                        .padding(.bottom, 30)
                     }
-                    .padding(.top, 24)
-                    .padding(.bottom, 32)
+                    .background(Color(.systemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 26))
+                    .shadow(color: .black.opacity(0.2), radius: 32, x: 0, y: 16)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 110)
                 }
-                .background(Color.white)
-                .cornerRadius(30)
-                .shadow(color: .black.opacity(0.1), radius: 20, x: 0, y: 10)
-                .padding(.horizontal, 24)
-                
-                Spacer()
             }
         }
         .navigationBarHidden(true)
     }
-    
+
     private func handleAuth() {
-        // Handle authentication logic
         if isLoginMode {
-            print("Login with email: \(email)")
+            print("Sign in: \(email)")
         } else {
-            print("Sign up with email: \(email), username: \(username)")
+            print("Sign up: \(email), \(username)")
         }
     }
 }
 
-// MARK: - Custom TextField
+// MARK: - Tab Button
+
+struct AuthTabButton: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.system(size: 15, weight: isSelected ? .semibold : .regular))
+                .foregroundColor(isSelected ? .primary : Color(.systemGray))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .background(
+                    Group {
+                        if isSelected {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color(.systemBackground))
+                                .shadow(color: .black.opacity(0.09), radius: 4, x: 0, y: 2)
+                        }
+                    }
+                )
+        }
+    }
+}
+
+// MARK: - Input Field
+
+struct AuthInputField: View {
+    let icon: String
+    let placeholder: String
+    @Binding var text: String
+    var keyboardType: UIKeyboardType = .default
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 15))
+                .foregroundColor(Color(.systemGray2))
+                .frame(width: 22)
+
+            TextField(placeholder, text: $text)
+                .keyboardType(keyboardType)
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                .font(.system(size: 15))
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+}
+
+// MARK: - Secure Field
+
+struct AuthSecureField: View {
+    let icon: String
+    let placeholder: String
+    @Binding var text: String
+    @Binding var isVisible: Bool
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 15))
+                .foregroundColor(Color(.systemGray2))
+                .frame(width: 22)
+
+            Group {
+                if isVisible {
+                    TextField(placeholder, text: $text)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                } else {
+                    SecureField(placeholder, text: $text)
+                }
+            }
+            .font(.system(size: 15))
+
+            Button(action: { isVisible.toggle() }) {
+                Image(systemName: isVisible ? "eye.slash" : "eye")
+                    .font(.system(size: 14))
+                    .foregroundColor(Color(.systemGray2))
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+}
+
+// MARK: - Social Auth Button
+
+struct SocialAuthButton: View {
+    let imageName: String
+    let label: String
+    let isTemplate: Bool
+    let backgroundColor: Color
+    let labelColor: Color
+    var hasBorder: Bool = false
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 9) {
+                if isTemplate {
+                    Image(imageName)
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 18, height: 18)
+                        .foregroundColor(labelColor)
+                } else {
+                    Image(imageName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 18, height: 18)
+                }
+
+                Text(label)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundColor(labelColor)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .background(backgroundColor)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                Group {
+                    if hasBorder {
+                        RoundedRectangle(cornerRadius: 12)
+                            .strokeBorder(Color(.systemGray4), lineWidth: 1)
+                    }
+                }
+            )
+            .shadow(color: .black.opacity(0.07), radius: 6, x: 0, y: 3)
+        }
+    }
+}
+
+// MARK: - Compatibility Aliases
 
 struct CustomTextField: View {
     let placeholder: String
     @Binding var text: String
     var keyboardType: UIKeyboardType = .default
-    
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            TextField(placeholder, text: $text)
-                .keyboardType(keyboardType)
-                .font(.system(size: 16))
-                .foregroundColor(.primary)
-                .padding(.bottom, 8)
-            
-            Rectangle()
-                .fill(Color(red: 0.2, green: 0.6, blue: 0.9).opacity(0.5))
-                .frame(height: 1)
-        }
+        AuthInputField(icon: "textformat", placeholder: placeholder, text: $text, keyboardType: keyboardType)
     }
 }
-
-// MARK: - Custom Secure Field
 
 struct CustomSecureField: View {
     let placeholder: String
     @Binding var text: String
     @Binding var isVisible: Bool
-    
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                if isVisible {
-                    TextField(placeholder, text: $text)
-                        .font(.system(size: 16))
-                        .foregroundColor(.primary)
-                } else {
-                    SecureField(placeholder, text: $text)
-                        .font(.system(size: 16))
-                        .foregroundColor(.primary)
-                }
-                
-                Button(action: { isVisible.toggle() }) {
-                    Image(systemName: isVisible ? "eye.slash.fill" : "eye.fill")
-                        .foregroundColor(.gray.opacity(0.6))
-                }
-            }
-            .padding(.bottom, 8)
-            
-            Rectangle()
-                .fill(Color(red: 0.2, green: 0.6, blue: 0.9).opacity(0.5))
-                .frame(height: 1)
-        }
+        AuthSecureField(icon: "lock", placeholder: placeholder, text: $text, isVisible: $isVisible)
     }
 }
-
-// MARK: - Social Login Button
 
 struct SocialLoginButton: View {
     let icon: String
     let color: Color
-    
+
     var body: some View {
-        Button(action: {
-            // Handle social login
-        }) {
+        Button(action: {}) {
             Image(systemName: icon)
-                .font(.system(size: 24))
+                .font(.system(size: 22))
                 .foregroundColor(.white)
-                .frame(width: 56, height: 56)
+                .frame(width: 52, height: 52)
                 .background(color)
                 .clipShape(Circle())
-                .shadow(color: color.opacity(0.3), radius: 8, x: 0, y: 4)
         }
     }
 }
@@ -270,4 +418,3 @@ struct SocialLoginButton: View {
 #Preview {
     AuthPage()
 }
-

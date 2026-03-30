@@ -198,8 +198,6 @@ struct ProfileView: View {
                         .cornerRadius(12)
                     }
                     
-                    ProfileOption(icon: "bell.fill", title: "Notifications")
-                    
                     // Favorites with Navigation
                     NavigationLink(destination: FavoritesPage()) {
                         HStack {
