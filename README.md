@@ -1,7 +1,7 @@
 # RuleGO 🌍
 
 <div align="center">
-  <img src="ruleGo/ruleGo/Assets.xcassets/AppLogo.imageset/AppLogo.png" alt="RuleGO Logo" width="120"/>
+  
   
   ### Know the rules. Travel safely.
   
